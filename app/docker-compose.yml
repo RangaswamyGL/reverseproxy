@@ -1,0 +1,27 @@
+version: "3"
+
+services:
+
+  login-service:
+    build: ./login
+    container_name: login-service
+
+  payment-service:
+    build: ./payment
+    container_name: payment-service
+
+  checkout-service:
+    build: ./checkout
+    container_name: checkout-service
+
+  reverse-proxy:
+    image: nginx:1.25-alpine
+    container_name: reverse-proxy
+    ports:
+      - "80:80"
+    volumes:
+      - ./nginx/default.conf:/etc/nginx/conf.d/default.conf
+    depends_on:
+      - login-service
+      - payment-service
+      - checkout-service  
